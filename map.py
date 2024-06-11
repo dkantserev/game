@@ -18,5 +18,6 @@ class Map:
 k=Map(8,8)
 k.map[3][2]=2
 k.map[4][3]=3
+k.map[1][1]=1
 k.printMap()
    
