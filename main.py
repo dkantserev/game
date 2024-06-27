@@ -5,7 +5,7 @@ from hellicopter import Hellicopter as Helico
 from pynput import keyboard
 
 tick =1
-TICK_SLEEP=0.05
+TICK_SLEEP=0.1
 TYPE_SYSTEM=os.name
 TREE_UPDATE=50
 FIRE_UPDATE=100

@@ -4,7 +4,7 @@ from utils import randCell2
 
 UPGRADE_COST=500
 TREE_BONUS=100
-icon='🟩🌳🌊🚁🔥🔵🏭'
+icon='✅🌳🌊🚁🔥🔵🏭'
 class Map:
     
     
@@ -33,8 +33,8 @@ class Map:
                 if(helico.x ==ri and helico.y ==ci):
                     print(icon[3],end='')
                 else:
-                    print(icon[cell],end="")
-            print("🔵",end="")
+                    print(icon[cell],end='')
+            print("🔵",end='')
             print()
         print("🔵" * int(len(self.map[0])+2))
 
