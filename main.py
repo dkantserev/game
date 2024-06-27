@@ -11,14 +11,35 @@ TREE_UPDATE=50
 FIRE_UPDATE=100
 MAP_H,MAP_W=10,20
 
+
 k=Map(MAP_H,MAP_W)
-k.generateRiver(10)
-k.generateRiver(10)
-k.generateForest(3,10)
 
 
-hel=Helico(MAP_H,MAP_W)
 
+hel=Helico(MAP_W,MAP_H)
+
+MOVES ={'a': (0,-1),'ф':(0,-1),'d':(0,1),'в':(0,1),'w':(-1,0),'ц':(-1,0),'s':(1,0),'ы':(1,0)}
+
+def on_release(key):
+    global hel
+    c= key.char.lower()
+    if c in MOVES.keys():
+        cx=MOVES[c][0]
+        cy=MOVES[c][1]
+        hel.move(cx,cy)
+    # if key.char =='ф':
+    #     print('yes')
+    # print('{0} released'.format(
+    #     key))
+    # if key == keyboard.Key.esc:
+    #     # Stop listener
+    #     return Falsedddddddwwwwwwwwwwdddddddddsaaaaaaaaaaaadaawwwwddddddsdsssssswwwwwwwwddssssssssdddwaaaasssswwadddddssdaaaddddddwaaaasdaaaaaaadwwwwwwwwdddddddaaaaaaaaaaassssssssssaaaaawwwaasssdddddddddddddddwwwaaaaaassssaaawwwwwwdssssssaaaaawwwwddsddsssdddddddwwwwwssssssaaaaaaaaaadddssdwdddddsaaaasssdwddaaaaaaawwwwaaaaaaaawwwwwddddddddsssssssssdddddddaaaaaawwwwwawwwddsdddddaaaaaaasasaaaaaaaaddddaaaadddddddsddsssssdddddddwaaaaaaaaaaaaaawwwdsssddsswwasdddddddddddddddddddddwdddddddddddddwwwwaaaaaaaaaaaaaaaaaasddddsdddddddwddwaddsssssssssaaaaaawdsdddaaaaaaaaawssd
+
+
+listener = keyboard.Listener(
+    
+    on_release=on_release)
+listener.start()
 
 while True:
     clear=''
@@ -28,7 +49,10 @@ while True:
         clear='clear'
     os.system(clear)
     print(tick)
+    k.processHelicoptert(hel)
+    hel.printStats()
     k.printMap(hel)
+
     tick+=1
     time.sleep(TICK_SLEEP)
     

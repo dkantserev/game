@@ -12,3 +12,4 @@ def randCell2(x,y):
     t=rand(0,3)
     dx,dy= moves[t][0],moves[t][1]
     return(x+dx,y+dy)
+

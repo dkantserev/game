@@ -2,13 +2,21 @@ from utils import randBool
 from utils import randCell
 from utils import randCell2
 
+UPGRADE_COST=500
+TREE_BONUS=100
+icon='🟩🌳🌊🚁🔥🔵🏭'
 class Map:
-    icon='🟩🌳🌊🚁🔥🌩️🔵'
-
+    
+    
+    
     def __init__(self,h,w):
         self.h=h
         self.w=w
         self.map=[[0 for i in   range(w)]for j  in  range(h)]
+        self.generateRiver(10)
+        self.generateRiver(10)
+        self.generateForest(3,10)
+        self.genUpdateShope()
     
     def checkBounds(self,x,y):
         if (x<0 or y<0 or x>=self.h or y>=self.w):
@@ -16,24 +24,44 @@ class Map:
         return True
     
     def printMap(self,helico):
+        print(helico.x,helico.y)
         print("🔵" * int(len(self.map[0])+2))
         for ri in range(self.h):
             print("🔵",end="")
             for ci in range(self.w):
                 cell=self.map[ri][ci]
                 if(helico.x ==ri and helico.y ==ci):
-                    print(self.icon[3],end='')
+                    print(icon[3],end='')
                 else:
-                    print(self.icon[cell],end="")
+                    print(icon[cell],end="")
             print("🔵",end="")
             print()
         print("🔵" * int(len(self.map[0])+2))
+
+    def processHelicoptert(self,helicopter):
+        c=self.map[helicopter.x][helicopter.y]
+        if(c== 2):
+            helicopter.tank=helicopter.mxTank
+        elif(c== 4 and helicopter.tank>0):
+            helicopter.tank-=1
+            helicopter.score+=TREE_BONUS
+            self.map[helicopter.x][helicopter.y]=1
+        elif(c==6 and helicopter.score>=500):
+            helicopter.mxTank +=1
+            helicopter.score-=UPGRADE_COST
+
+
 
     def generateForest(self,r,mxr):
         for ri in range(self.h):
             for ci in range(self.w):
                 if randBool(r,mxr):
                     self.map[ri][ci]=1
+
+    def genUpdateShope(self):
+        c=randCell(self.w,self.h)
+        self.map[c[0]][c[1]]=6
+
     def addFire(self):
         c=randCell(self.w,self.h)
         cx,cy=c[0],c[1]
@@ -51,7 +79,7 @@ class Map:
             for j in range(self.w):
                 if(self.map[i][j]==4):
                     self.map[i][j]=0
-        for i in range(5):
+        for i in range(10):
             self.addFire()
         
     def generateRiver(self,l):
