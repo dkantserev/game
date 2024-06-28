@@ -2,9 +2,11 @@ from utils import randBool
 from utils import randCell
 from utils import randCell2
 
+
 UPGRADE_COST=500
 TREE_BONUS=100
-icon='✅🌳🌊🚁🔥🔵🏭'
+LIFE_COST = 300
+icon='✅🌳🌊🚁🔥🔵🏭🏥🌌💀'
 class Map:
     
     
@@ -17,20 +19,26 @@ class Map:
         self.generateRiver(10)
         self.generateForest(3,10)
         self.genUpdateShope()
+        self.genHospital()
     
     def checkBounds(self,x,y):
         if (x<0 or y<0 or x>=self.h or y>=self.w):
             return False
         return True
     
-    def printMap(self,helico):
+    def printMap(self,helico,clouds):
         print(helico.x,helico.y)
         print("🔵" * int(len(self.map[0])+2))
         for ri in range(self.h):
             print("🔵",end="")
             for ci in range(self.w):
+                
                 cell=self.map[ri][ci]
-                if(helico.x ==ri and helico.y ==ci):
+                if (clouds.cells[ri][ci]==1):
+                    print(icon[8],end='')
+                elif (clouds.cells[ri][ci]==2):
+                    print(icon[9],end='')
+                elif(helico.x ==ri and helico.y ==ci):
                     print(icon[3],end='')
                 else:
                     print(icon[cell],end='')
@@ -38,8 +46,9 @@ class Map:
             print()
         print("🔵" * int(len(self.map[0])+2))
 
-    def processHelicoptert(self,helicopter):
+    def processHelicoptert(self,helicopter,clouds):
         c=self.map[helicopter.x][helicopter.y]
+        d=clouds.cells[helicopter.x][helicopter.y]
         if(c== 2):
             helicopter.tank=helicopter.mxTank
         elif(c== 4 and helicopter.tank>0):
@@ -49,6 +58,14 @@ class Map:
         elif(c==6 and helicopter.score>=500):
             helicopter.mxTank +=1
             helicopter.score-=UPGRADE_COST
+        elif(c==7 and helicopter.score>=LIFE_COST):
+            helicopter.life +=1
+            helicopter.score-=LIFE_COST
+        if (d==2):
+            helicopter.life-=1
+            if (helicopter.life==0):
+                    helicopter.gameOver()
+                    exit(0)
 
 
 
@@ -61,6 +78,13 @@ class Map:
     def genUpdateShope(self):
         c=randCell(self.w,self.h)
         self.map[c[0]][c[1]]=6
+
+    def genHospital(self):
+        c=randCell(self.w,self.h)
+        if self.map[c[0]][c[1]]!=6:
+            self.map[c[0]][c[1]]=7
+        else:
+            self.genHospital()   
 
     def addFire(self):
         c=randCell(self.w,self.h)
