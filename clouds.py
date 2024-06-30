@@ -1,4 +1,5 @@
 from utils import randBool
+
 class Clouds:
     def __init__(self,w,h):
         self.w=w
@@ -14,3 +15,9 @@ class Clouds:
                         self.cells[i][j]=2
                 else:
                     self.cells[i][j]=0
+
+    def exportData(self):
+        return {"cells": self.cells}
+    
+    def importData(self,data):
+        self.cells = data['cells'] or [[0 for i in   range(w)]for j  in  range(h)]

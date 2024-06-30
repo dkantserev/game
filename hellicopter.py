@@ -34,3 +34,19 @@ class Hellicopter:
             print("GAME OVER, YOUR SCORE IS ",self.score)
             for i in range(5):
                 print("")
+
+    def exportData(self):
+        return {"score": self.score,
+              "lives":self.life,
+              "x":self.x,
+              "y":self.y,
+              "tank": self.tank,
+              "mxTank":self.mxTank}
+    
+    def importData(self,data):
+        self.x= data['x'] or 0
+        self.y= data['y'] or 0
+        self.tank= data['tank'] or 0
+        self.mxTank = data['mxTank'] or 1
+        self.life= data['lives'] or 3
+        self.score = data['score'] or 0

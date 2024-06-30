@@ -6,7 +6,7 @@ from utils import randCell2
 UPGRADE_COST=500
 TREE_BONUS=100
 LIFE_COST = 300
-icon='✅🌳🌊🚁🔥🔵🏭🏥🌌💀'
+ICON='✅🌳🌊🚁🔥🔵🏭🏥🌌💀'
 class Map:
     
     
@@ -35,17 +35,72 @@ class Map:
                 
                 cell=self.map[ri][ci]
                 if (clouds.cells[ri][ci]==1):
-                    print(icon[8],end='')
+                    print(ICON[8],end='')
                 elif (clouds.cells[ri][ci]==2):
-                    print(icon[9],end='')
+                    print(ICON[9],end='')
                 elif(helico.x ==ri and helico.y ==ci):
-                    print(icon[3],end='')
+                    print(ICON[3],end='')
                 else:
-                    print(icon[cell],end='')
+                    print(ICON[cell],end='')
             print("🔵",end='')
             print()
         print("🔵" * int(len(self.map[0])+2))
 
+
+    def generateForest(self,r,mxr):
+        for ri in range(self.h):
+            for ci in range(self.w):
+                if randBool(r,mxr):
+                    self.map[ri][ci]=1
+
+    def genUpdateShope(self):
+        c=randCell(self.w,self.h)
+        self.map[c[0]][c[1]]=6
+
+    
+    def genHospital(self):
+        c=randCell(self.w,self.h)
+        if self.map[c[0]][c[1]]!=6:
+            self.map[c[0]][c[1]]=7
+        else:
+            self.genHospital()   
+
+
+    def generateTree(self):
+        c=randCell(self.w,self.h)
+        cx,cy= c[0],c[1]
+        if(self.checkBounds(cx,cy)and self.map[cx][cy]==0):
+            self.map[cx][cy]=1
+
+    def generateRiver(self,l):
+        rc=randCell(self.w,self.h)
+
+        
+        rx=rc[0]
+        ry=rc[1]
+        self.map[rx][ry]=2  
+        while l>0:
+            rc2=randCell2(rx,ry)
+            rx2,ry2=rc2[0],rc2[1]
+            if (self.checkBounds(rx2,ry2)):
+                self.map[rx2][ry2]=2
+                rx,ry=rx2,ry2
+                l-=1
+
+    def addFire(self):
+        c=randCell(self.w,self.h)
+        cx,cy=c[0],c[1]
+        if(self.map[cx][cy]==1):
+            self.map[cx][cy]=4
+
+    def updateFires(self):
+        for i in range (self.h):
+            for j in range(self.w):
+                if(self.map[i][j]==4):
+                    self.map[i][j]=0
+        for i in range(10):
+            self.addFire()
+        
     def processHelicoptert(self,helicopter,clouds):
         c=self.map[helicopter.x][helicopter.y]
         d=clouds.cells[helicopter.x][helicopter.y]
@@ -66,64 +121,12 @@ class Map:
             if (helicopter.life==0):
                     helicopter.gameOver()
                     exit(0)
-
-
-
-    def generateForest(self,r,mxr):
-        for ri in range(self.h):
-            for ci in range(self.w):
-                if randBool(r,mxr):
-                    self.map[ri][ci]=1
-
-    def genUpdateShope(self):
-        c=randCell(self.w,self.h)
-        self.map[c[0]][c[1]]=6
-
-    def genHospital(self):
-        c=randCell(self.w,self.h)
-        if self.map[c[0]][c[1]]!=6:
-            self.map[c[0]][c[1]]=7
-        else:
-            self.genHospital()   
-
-    def addFire(self):
-        c=randCell(self.w,self.h)
-        cx,cy=c[0],c[1]
-        if(self.map[cx][cy]==1):
-            self.map[cx][cy]=4
-
-    def generateTree(self):
-        c=randCell(self.w,self.h)
-        cx,cy= c[0],c[1]
-        if(self.checkBounds(cx,cy)and self.map[cx][cy]==0):
-            self.map[cx][cy]=1
-
-    def updateFires(self):
-        for i in range (self.h):
-            for j in range(self.w):
-                if(self.map[i][j]==4):
-                    self.map[i][j]=0
-        for i in range(10):
-            self.addFire()
-        
-    def generateRiver(self,l):
-        rc=randCell(self.w,self.h)
-
-        
-        rx=rc[0]
-        ry=rc[1]
-        self.map[rx][ry]=2  
-        while l>0:
-            rc2=randCell2(rx,ry)
-            rx2,ry2=rc2[0],rc2[1]
-            if (self.checkBounds(rx2,ry2)):
-                self.map[rx2][ry2]=2
-                rx,ry=rx2,ry2
-                l-=1
-
         
  
+    def importData(self,data):
+        self.map = data["cells"] or [[0 for i in   range(w)]for j  in  range(h)]
 
-
+    def exportData(self):
+        return {'cells': self.map}
 
    
