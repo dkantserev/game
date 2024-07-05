@@ -7,6 +7,8 @@ UPGRADE_COST=500
 TREE_BONUS=100
 LIFE_COST = 300
 ICON='✅🌳🌊🚁🔥🔵🏭🏥🌌💀'
+PYNALTE= 25
+
 class Map:
     
     
@@ -93,11 +95,15 @@ class Map:
         if(self.map[cx][cy]==1):
             self.map[cx][cy]=4
 
-    def updateFires(self):
+    def updateFires(self,helicopter):
         for i in range (self.h):
             for j in range(self.w):
                 if(self.map[i][j]==4):
                     self.map[i][j]=0
+                    if(helicopter.score>0):
+                        helicopter.score-=PYNALTE
+                    else:
+                        helicopter.score=0    
         for i in range(10):
             self.addFire()
         
