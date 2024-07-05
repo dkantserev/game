@@ -74,7 +74,8 @@ while True:
     if (tick%TREE_UPDATE==0):
         map.generateTree()
     if (tick%FIRE_UPDATE==0):
-        map.updateFires()
+        map.updateFires(hel)
     if (tick%CLOUDS_UPDATE==0):
         clouds.updateClouds()
+        
         
